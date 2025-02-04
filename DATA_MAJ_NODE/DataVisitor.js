@@ -1,14 +1,11 @@
 const fs = require('fs');
 
-// Charger le fichier texte contenant le JSON
-fs.readFile('data.txt', 'utf8', (err, data) => {
-    if (err) {
-        console.error('Erreur de lecture du fichier', err);
-        return;
-    }
+const processSensorData = (filePath) => {
+    // Lire le fichier texte contenant le JSON
+    const data = fs.readFileSync(filePath, 'utf8');
 
     try {
-        // Parse le contenu du fichier en JSON
+        // Convertir le contenu du fichier en JSON
         const inputData = JSON.parse(data);
 
         // Créer un nouvel objet avec la structure souhaitée
@@ -17,7 +14,7 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
             measures: []
         };
 
-        // Transformer chaque mesure en ajoutant une valeur aléatoire
+        // Transformer chaque mesure et ajouter une valeur aléatoire
         inputData.measure.forEach(measure => {
             outputData.measures.push({
                 name: measure.name,
@@ -25,18 +22,13 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
             });
         });
 
-        // Sauvegarder le résultat dans un fichier output.js
-        const outputJs = `const data = ${JSON.stringify(outputData, null, 4)};`;
-
-        fs.writeFile('output.js', outputJs, (err) => {
-            if (err) {
-                console.error('Erreur de sauvegarde du fichier', err);
-            } else {
-                console.log('Fichier output.js créé avec succès!');
-            }
-        });
+        // Retourner les données transformées
+        return outputData;
 
     } catch (e) {
-        console.error('Erreur de parsing JSON', e);
+        console.error('Erreur de parsing JSON:', e);
+        return null;  // Retourne null en cas d'erreur
     }
-});
+};
+
+module.exports = { processSensorData };
