@@ -1,2 +1,4 @@
-DB_AND_DATA_SAMPLE/
-DASHBOARD_PROJECT/node_modules/
+DB_AND_DATA_SAMPLE/config
+DB_AND_DATA_SAMPLE/data
+SERVER/node_modules/
+DATA_MAJ_NODE/node_modules
