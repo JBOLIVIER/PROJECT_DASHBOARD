@@ -1,5 +1,5 @@
 DB_AND_DATA_SAMPLE/config
 DB_AND_DATA_SAMPLE/data
 SERVER/node_modules/
-DASHBOARD_PROJECT/node_modules/
-CLIENT/node_modules/
+DATA_MAJ_NODE/node_modules
+CLIENT/node_modules
