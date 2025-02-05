@@ -5,7 +5,7 @@ async function insertWeatherData(data) {
     // Configuration de la connexion InfluxDB
     const url = 'http://localhost:8086';  // Remplacez par l'URL de votre serveur InfluxDB
     const org = 'ign'; // Remplacez par votre organisation
-    const token = '93UUdFOna9aIr-eaGmp4d4teA_CBsE2Pea6sio54tBUC_h9ffZXrHD23acyK4fQC0pgw4tvAHGq2gRpxNCAZnw=='; // Assurez-vous que votre token est dans les variables d'environnement
+    const token = 'awWkYSHiI6BxF5wzKrkVEPjR8EdXdzcTD2hRDv2SjrgYUkbkkxHewRFQcdkSyaU_vTAzSqWdQ1Gq4KzOiN_7cQ=='; // Assurez-vous que votre token est dans les variables d'environnement
     const bucket = 'meteo'; // Remplacez par votre bucket InfluxDB
 
     // Créer un client InfluxDB
