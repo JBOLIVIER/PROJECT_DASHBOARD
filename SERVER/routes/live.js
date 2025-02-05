@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
-
-const UNITS = {
-    temperature: "C",
-    pressure: "hP",
-    humidity: "%",
-    rain: "mm/m2",
-    lux: "Lux",
-    wind_heading: "°",
-    wind_speed_avg: "km/h",
-    lat: "DD",
-    lon: "DD"
-};
+const { UNITS, CAPTEURS }= require('../data.js');
 
 router.get('/', async (req, res) => {
     try {
@@ -43,7 +32,18 @@ router.get('/', async (req, res) => {
 router.get('/:list_capteur', async (req, res) => {
     try {
         const { list_capteur } = req.params;
+
+        if (!list_capteur.includes('-')) {
+            return res.status(400).json({ message: "A query argument is invalid" });
+        }
+
         const capteurs = list_capteur.split("-");
+
+        const capteursInvalides = capteurs.filter(capteur => !VALID_CAPTEURS.includes(capteur));
+        if (capteursInvalides.length > 0) {
+            return res.status(400).json({ message: "A query argument is invalid"});
+        }
+
         const { data: latestData, date } = await db.getLiveDataBySensor(list_capteur);
         
         // clé-valeur
