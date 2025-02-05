@@ -2,7 +2,7 @@ const UNITS = {
     temperature: "C",
     pressure: "hP",
     humidity: "%",
-    lux: "Lux",
+    luminosity: "Lux",
     wind_heading: "°",
     wind_speed_avg: "km/h",
     lat: "DD",
