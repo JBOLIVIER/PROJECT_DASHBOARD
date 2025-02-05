@@ -75,7 +75,6 @@ const getLiveDataBySensor = async (capteurs) => {
 };
 
 const getSampleData = async (start, stop) => {
-    // Vérifier si `stop` est "now" et ajuster la requête en conséquence
     const stopQuery = stop === "now" ? "" : `, stop: ${JSON.stringify(stop)}`;
 
     const fluxQuery = `
@@ -109,15 +108,29 @@ const getSampleData = async (start, stop) => {
     });
 };
 
-const getSampleDataBySensor = async (start, stop) => {
-    const fluxQuery = ``;
-    const result = [];
+const getSampleDataBySensor = async (start, stop, capteurs) => {
+    const filterMeasurements = capteurs.map(capteur => `r._measurement == "${capteur}"`).join(" or ");
+    const stopQuery = stop === "now" ? "" : `, stop: ${JSON.stringify(stop)}`;
+
+    const fluxQuery = `
+        from(bucket: "${INFLUX_BUCKET}")
+        |> range(start: ${JSON.stringify(start)}${stopQuery})  // Plage temporelle dynamique
+        |> filter(fn: (r) => ${filterMeasurements})  // Filtrer les capteurs demandés
+    `;
+
+    const result = {};
 
     return new Promise((resolve, reject) => {
         queryApi.queryRows(fluxQuery, {
             next(row, tableMeta) {
                 const obj = tableMeta.toObject(row);
-                result.push(obj);
+                const timestamp = obj._time;
+
+                if (!result[timestamp]) {
+                    result[timestamp] = { date: timestamp };
+                }
+
+                result[timestamp][obj._measurement] = obj._value;
             },
             error(error) {
                 console.error('Erreur InfluxDB:', error);
@@ -129,5 +142,6 @@ const getSampleDataBySensor = async (start, stop) => {
         });
     });
 };
+
 
 module.exports = { getLiveData, getLiveDataBySensor, getSampleData, getSampleDataBySensor };
