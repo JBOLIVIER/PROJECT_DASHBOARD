@@ -2,9 +2,21 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 
+const UNITS = {
+    temperature: "C",
+    pressure: "hP",
+    humidity: "%",
+    rain: "mm/m2",
+    lux: "Lux",
+    wind_heading: "°",
+    wind_speed_avg: "km/h",
+    lat: "DD",
+    lon: "DD"
+};
+
 router.get('/', async (req, res) => {
     try {
-        const latestData = await db.getLiveData();
+        const { data: latestData, date } = await db.getLiveData();
 
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
@@ -14,18 +26,9 @@ router.get('/', async (req, res) => {
 
         const response = {
             id: 30,
-            unit: {
-                temperature: "C",
-                pressure: "hP",
-                humidity: "%",
-                lux: "Lux",
-                wind_heading: "°",
-                wind_speed_avg: "km/h",
-                lat: "DD",
-                lon: "DD"
-            },
+            unit: UNITS,
             data: {
-                date: new Date().toISOString(),
+                date,
                 ...data
             }
         };
@@ -41,28 +44,27 @@ router.get('/:list_capteur', async (req, res) => {
     try {
         const { list_capteur } = req.params;
         const capteurs = list_capteur.split("-");
-        const latestData = await db.getLiveDataBySensor(list_capteur);
+        const { data: latestData, date } = await db.getLiveDataBySensor(list_capteur);
         
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
           acc[item._measurement] = item._value;
           return acc;
-      }, {});
+        }, {});
+
+        // Unités des capteurs demandés
+        const filteredUnits = Object.keys(UNITS)
+            .filter(key => capteurs.includes(key))
+            .reduce((acc, key) => {
+                acc[key] = UNITS[key];
+                return acc;
+            }, {});
 
       const response = {
           id: 30,
-          unit: {
-              temperature: "C",
-              pressure: "hP",
-              humidity: "%",
-              lux: "Lux",
-              wind_heading: "°",
-              wind_speed_avg: "km/h",
-              lat: "DD",
-              lon: "DD"
-          },
+          unit: filteredUnits,
           data: {
-              date: new Date().toISOString(),
+              date,
               ...data
           }
       };

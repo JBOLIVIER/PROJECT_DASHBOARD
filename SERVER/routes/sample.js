@@ -2,12 +2,40 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 
+const UNITS = {
+    temperature: "C",
+    pressure: "hP",
+    humidity: "%",
+    rain: "mm/m2",
+    lux: "Lux",
+    wind_heading: "°",
+    wind_speed_avg: "km/h",
+    lat: "DD",
+    lon: "DD"
+};
+
 // Route /sample/{start}/now
 router.get('/:start/now', async (req, res) => {
     try {
         const { start } = req.params;
-        const data = await db.getSampleData(start, 'now');
-        res.json(data);
+        const latestData = await db.getSampleData(start, 'now');
+
+        // clé-valeur
+        const data = latestData.reduce((acc, item) => {
+            acc[item._measurement] = item._value;
+            return acc;
+        }, {});
+
+        const response = {
+            id: 30,
+            unit: UNITS,
+            data: {
+                date: new Date().toISOString(),
+                ...data
+            }
+        };
+
+        res.json(response);
     } catch (error) {
         res.status(500).json({ error: 'Erreur serveur' });
     }
