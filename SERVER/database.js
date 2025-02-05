@@ -1,8 +1,8 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
 
 // Configuration
-const INFLUX_URL = 'http://localhost:8086';  // Adresse du conteneur InfluxDB
-const INFLUX_TOKEN = 'ensg2025';  // Mot de passe défini dans docker-compose
+const INFLUX_URL = 'http://localhost:8086';
+const INFLUX_TOKEN = process.env.INFLUXDB_TOKEN;
 const INFLUX_ORG = 'ign';
 const INFLUX_BUCKET = 'meteo';
 

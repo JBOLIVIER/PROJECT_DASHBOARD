@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        res.status(500).json({ error: 'Erreur serveur' });
+        res.status(500).json({ error: 'Erreur serveur de live' });
     }
 });
 
