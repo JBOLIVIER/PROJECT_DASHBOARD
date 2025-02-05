@@ -80,7 +80,7 @@ async function initDataPeriodically() {
     });
 
     const RAINwatcher = chokidar.watch(RAINfilePath, {});
-    RAINwatcher.on('change', () => { data.measures.rain += 0.328 });
+    RAINwatcher.on('change', () => { data.measures.rain = Number(data.measures.rain) + 0.328; });
 
     // Envoi des données et relance l'initialisation toutes les secondes
     setInterval(async () => {
@@ -99,8 +99,6 @@ console.log(`Surveillance des fichiers démarrée...`);
 // Fonction pour la mise à jour des données du capteur
 async function SensorDataUpdate(data) {
     let datamaj = await processSensorData(SENSORfilePath); // Assure-toi que cette fonction soit asynchrone
-    console.log(datamaj);
-    console.log(data);
     datamaj.measures.forEach(newmeasure => {
         let M_name = newmeasure.name;
         let measureTochange = data.measures.find(measure => measure.name === M_name);
