@@ -104,6 +104,7 @@ async function SensorDataUpdate() {
         let M_name = newmeasure.name;
         let measureTochange = data.measures.find(measure => measure.name === M_name);
         if (measureTochange) {
+            console.log((measureTochange.value += newmeasure.value) / 2);
             measureTochange.value = (measureTochange.value += newmeasure.value) / 2;
         }
     });
