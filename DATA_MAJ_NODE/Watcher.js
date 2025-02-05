@@ -67,11 +67,10 @@ async function dataINIT() {
 // Fonction pour relancer l'initialisation des données toutes les secondes
 async function initDataPeriodically() {
     // Récupère les données initiales
-    data = await dataINIT();
-
+    let data = await dataINIT();
     // Instanciation des watchers
     const SENSORwatcher = chokidar.watch(SENSORfilePath, {});
-    SENSORwatcher.on('change', () => { SensorDataUpdate(); console.log('change happened'); });
+    SENSORwatcher.on('change', () => { SensorDataUpdate(data); console.log('change happened'); });
 
     const TPHwatcher = chokidar.watch(TPHfilePath, {});
     TPHwatcher.on('change', () => {
@@ -98,14 +97,15 @@ initDataPeriodically(); // Démarrer l'initialisation périodique des données
 console.log(`Surveillance des fichiers démarrée...`);
 
 // Fonction pour la mise à jour des données du capteur
-async function SensorDataUpdate() {
+async function SensorDataUpdate(data) {
     let datamaj = await processSensorData(SENSORfilePath); // Assure-toi que cette fonction soit asynchrone
+    console.log(datamaj);
+    console.log(data);
     datamaj.measures.forEach(newmeasure => {
         let M_name = newmeasure.name;
         let measureTochange = data.measures.find(measure => measure.name === M_name);
         if (measureTochange) {
-            console.log((measureTochange.value += newmeasure.value) / 2);
-            measureTochange.value = (measureTochange.value += newmeasure.value) / 2;
+            measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
         }
     });
 }
