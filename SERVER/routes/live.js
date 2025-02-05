@@ -6,6 +6,7 @@ const { UNITS, CAPTEURS }= require('../data.js');
 router.get('/', async (req, res) => {
     try {
         const { data: latestData, date } = await db.getLiveData();
+        console.log("ça passe");
 
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
