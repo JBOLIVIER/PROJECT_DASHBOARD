@@ -19,7 +19,7 @@ const processSensorData = (filePath) => {
         inputData.measure.forEach(measure => {
             outputData.measures.push({
                 name: measure.name,
-                value: measure.value 
+                value: Number(measure.value) 
             });
         });
 
@@ -54,8 +54,8 @@ const processTphData = (filePath,hygr,press) => {
         // Convertir le contenu du fichier en JSON
         const inputData = JSON.parse(data);
 
-        hygrNEW = data.hygro
-        pressNEW = data.press
+        hygrNEW = Number(data.hygro);
+        pressNEW = Number(data.press);
         if (hygr === 0) {
             return [(hygr + hygrNEW)/2 , (press + pressNEW)/2]
         } else {
