@@ -1,12 +1,15 @@
 <template>
-    <footer class="bg-dark text-white text-center py-3">
-      <p>© 2024 Mon Site. Tous droits réservés.</p>
-    </footer>
-  </template>
-  
-  <script>
-  export default {
-    name: "Footer",
-  };
-  </script>
-  
+  <footer class="footer">
+    <p>&copy; 2024 Mon Site. Tous droits réservés.</p>
+  </footer>
+</template>
+
+<style scoped>
+.footer {
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+</style>
