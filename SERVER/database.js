@@ -1,8 +1,9 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
+const { UNITS, VALID_CAPTEURS }= require('./data.js');
 
 // Configuration
 const INFLUX_URL = 'http://localhost:8086';  // Adresse du conteneur InfluxDB
-const INFLUX_TOKEN = 'ensg2025';  // Mot de passe défini dans docker-compose
+const INFLUX_TOKEN = process.env.INFLUXDB_TOKEN;  // Mot de passe défini dans docker-compose
 const INFLUX_ORG = 'ign';
 const INFLUX_BUCKET = 'meteo';
 
@@ -11,9 +12,14 @@ const influxDB = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN });
 const queryApi = influxDB.getQueryApi(INFLUX_ORG);
 
 const getLiveData = async () => {
+    const filterMeasurements = VALID_CAPTEURS.map(
+        capteur => `r._measurement == "${capteur}"`
+    ).join(" or ");
+
     const fluxQuery = `
         from(bucket: "${INFLUX_BUCKET}")
         |> range(start: 0)
+        |> filter(fn: (r) => ${filterMeasurements})
         |> last()
     `;
     const result = [];
@@ -23,6 +29,7 @@ const getLiveData = async () => {
         queryApi.queryRows(fluxQuery, {
             next(row, tableMeta) {
                 const obj = tableMeta.toObject(row);
+                console.log("Row:", obj);
                 result.push(obj);
 
                 if (!latestTimestamp) {
@@ -34,6 +41,7 @@ const getLiveData = async () => {
                 reject(error);
             },
             complete() {
+                console.log("Résultat final :", result);
                 resolve({ data: result, date: latestTimestamp });
             }
         });

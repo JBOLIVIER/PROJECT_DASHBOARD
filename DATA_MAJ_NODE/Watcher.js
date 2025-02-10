@@ -23,10 +23,10 @@ const data = {
 */
 // filepath to change for raspeberry.pi
 
-const SENSORfilePath = '/home/formation/Documents/WEB/PROJECT_DASHBOARD/DB_AND_DATA_SAMPLE/shm/sensors';
-const TPHfilePath = '/home/formation/Documents/WEB/PROJECT_DASHBOARD/DB_AND_DATA_SAMPLE/shm/tph';
-const NMEAfilePath = '/home/formation/Documents/WEB/PROJECT_DASHBOARD/DB_AND_DATA_SAMPLE/shm/gpsNmea';
-const RAINfilePath = '/home/formation/Documents/WEB/PROJECT_DASHBOARD/DB_AND_DATA_SAMPLE/shm/rainCounter';
+const SENSORfilePath = '../DB_AND_DATA_SAMPLE/shm/sensors';
+const TPHfilePath = '../DB_AND_DATA_SAMPLE/shm/tph';
+const NMEAfilePath = '../DB_AND_DATA_SAMPLE/shm/gpsNmea';
+const RAINfilePath = '../DB_AND_DATA_SAMPLE/shm/rainCounter';
 
 // data initialization
 async function dataINIT() {
@@ -90,7 +90,7 @@ async function initDataPeriodically() {
 
         // Récupère à nouveau les données après 1 seconde
         data = await dataINIT(); 
-    }, 1000); // Intervalle de 1000 ms = 1 seconde
+    }, 10000); // Intervalle de 1000 ms = 1 seconde
 }
 
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
