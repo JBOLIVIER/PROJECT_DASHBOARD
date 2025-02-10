@@ -23,10 +23,10 @@ const data = {
 */
 // filepath to change for raspeberry.pi
 
-const SENSORfilePath = '../DB_AND_DATA_SAMPLE/shm/sensors';
-const TPHfilePath = '../DB_AND_DATA_SAMPLE/shm/tph';
-const NMEAfilePath = '../DB_AND_DATA_SAMPLE/shm/gpsNmea';
-const RAINfilePath = '../DB_AND_DATA_SAMPLE/shm/rainCounter';
+const SENSORfilePath = '/dev/shm/sensors';
+const TPHfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/tph';
+const NMEAfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/gpsNmea';
+const RAINfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/rainCounter';
 
 // data initialization
 async function dataINIT() {
