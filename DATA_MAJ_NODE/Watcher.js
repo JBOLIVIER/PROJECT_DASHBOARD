@@ -24,9 +24,9 @@ const data = {
 // filepath to change for raspeberry.pi
 
 const SENSORfilePath = '/dev/shm/sensors';
-const TPHfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/tph';
-const NMEAfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/gpsNmea';
-const RAINfilePath = '/dev/DB_AND_DATA_SAMPLE/shm/rainCounter';
+const TPHfilePath = '/dev/shm/tph.log';
+const NMEAfilePath = '/dev/shm/gpsNmea';
+const RAINfilePath = '/dev/shm/rainCounter.log';
 
 // data initialization
 async function dataINIT() {
@@ -67,11 +67,10 @@ async function dataINIT() {
 // Fonction pour relancer l'initialisation des données toutes les secondes
 async function initDataPeriodically() {
     // Récupère les données initiales
-    data = await dataINIT();
-
+    let data = await dataINIT();
     // Instanciation des watchers
     const SENSORwatcher = chokidar.watch(SENSORfilePath, {});
-    SENSORwatcher.on('change', () => { SensorDataUpdate(); console.log('change happened'); });
+    SENSORwatcher.on('change', () => { SensorDataUpdate(data); console.log('change happened'); });
 
     const TPHwatcher = chokidar.watch(TPHfilePath, {});
     TPHwatcher.on('change', () => {
@@ -81,7 +80,7 @@ async function initDataPeriodically() {
     });
 
     const RAINwatcher = chokidar.watch(RAINfilePath, {});
-    RAINwatcher.on('change', () => { data.measures.rain += 0.328 });
+    RAINwatcher.on('change', () => { data.measures.rain = Number(data.measures.rain) + 0.328; });
 
     // Envoi des données et relance l'initialisation toutes les secondes
     setInterval(async () => {
@@ -90,7 +89,7 @@ async function initDataPeriodically() {
 
         // Récupère à nouveau les données après 1 seconde
         data = await dataINIT(); 
-    }, 10000); // Intervalle de 1000 ms = 1 seconde
+    }, 5000); // Intervalle de 1000 ms = 1 seconde
 }
 
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
@@ -98,13 +97,13 @@ initDataPeriodically(); // Démarrer l'initialisation périodique des données
 console.log(`Surveillance des fichiers démarrée...`);
 
 // Fonction pour la mise à jour des données du capteur
-async function SensorDataUpdate() {
+async function SensorDataUpdate(data) {
     let datamaj = await processSensorData(SENSORfilePath); // Assure-toi que cette fonction soit asynchrone
     datamaj.measures.forEach(newmeasure => {
         let M_name = newmeasure.name;
         let measureTochange = data.measures.find(measure => measure.name === M_name);
         if (measureTochange) {
-            measureTochange.value = (measureTochange.value += newmeasure.value) / 2;
+            measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
         }
     });
 }

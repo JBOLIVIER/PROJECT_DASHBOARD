@@ -20,7 +20,10 @@ async function insertWeatherData(data) {
 
     // Ajouter chaque mesure comme un champ
     data.measures.forEach(m => {
-        const point = new Point(m.name)  // Nom de la mesure
+        const point = new Point(m.name); // Nom de la mesure
+        let value;
+        if (isNaN(m.value)) { value = 0;}
+        else { value = m.value};
         point.floatField("value",m.value); // Ajouter chaque champ avec son nom et sa valeur
         // Écrire les données dans InfluxDB
         writeApi.writePoint(point)
