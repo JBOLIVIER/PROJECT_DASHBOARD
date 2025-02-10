@@ -2,6 +2,7 @@
 import Footer from '../components/Footer.vue'
 import Header from '../components/Header.vue'
 import MAP from '../components/leafletMap.vue'
+import GRAPH from '../components/graphique.vue'
 </script>
 
 <template>
@@ -11,6 +12,9 @@ import MAP from '../components/leafletMap.vue'
   <map>
     <MAP />
   </map>
+  <graph>
+    <GRAPH />
+  </graph>
   <footer>
     <Footer />
   </footer>
