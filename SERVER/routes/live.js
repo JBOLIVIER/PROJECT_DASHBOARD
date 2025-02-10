@@ -46,7 +46,7 @@ router.get('/:list_capteur', async (req, res) => {
             return res.status(400).json({ message: "A query argument is invalid"});
         }
         
-        const { data: latestData, date } = await db.getLiveDataBySensor(capteurs);
+        const { data: latestData } = await db.getLiveDataBySensor(capteurs);
         
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
@@ -66,7 +66,7 @@ router.get('/:list_capteur', async (req, res) => {
           id: 30,
           unit: filteredUnits,
           data: {
-              date,
+              date: new Date().toISOString(),
               ...data
           }
       };
