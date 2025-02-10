@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
-const { UNITS, CAPTEURS }= require('../data.js');
+const { UNITS, VALID_CAPTEURS }= require('../data.js');
 
 router.get('/', async (req, res) => {
     try {
-        const { data: latestData, date } = await db.getLiveData();
-        console.log("ça passe");
+        const { data: latestData } = await db.getLiveData();
 
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
@@ -18,15 +17,14 @@ router.get('/', async (req, res) => {
             id: 30,
             unit: UNITS,
             data: {
-                date,
+                date: new Date().toISOString(),
                 ...data
             }
         };
 
         res.json(response);
     } catch (error) {
-        console.log("ça casse");
-        res.status(500).json({ error: 'Erreur serveur de live' });
+        res.status(500).json({ error: 'Erreur serveur live' });
     }
 });
 
@@ -36,7 +34,9 @@ router.get('/:list_capteur', async (req, res) => {
         const { list_capteur } = req.params;
 
         if (!list_capteur.includes('-')) {
-            return res.status(400).json({ message: "A query argument is invalid" });
+            if (!VALID_CAPTEURS.includes(list_capteur)) {
+                return res.status(400).json({ message: "A query argument is invalid" });
+            }
         }
 
         const capteurs = list_capteur.split("-");
@@ -45,8 +45,8 @@ router.get('/:list_capteur', async (req, res) => {
         if (capteursInvalides.length > 0) {
             return res.status(400).json({ message: "A query argument is invalid"});
         }
-
-        const { data: latestData, date } = await db.getLiveDataBySensor(list_capteur);
+        
+        const { data: latestData } = await db.getLiveDataBySensor(capteurs);
         
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
@@ -66,14 +66,15 @@ router.get('/:list_capteur', async (req, res) => {
           id: 30,
           unit: filteredUnits,
           data: {
-              date,
+              date: new Date().toISOString(),
               ...data
           }
       };
-
+    
       res.json(response);
+      
   } catch (error) {
-      res.status(500).json({ error: 'Erreur serveur' });
+      res.status(500).json({ error: 'Erreur serveur de live capteur' });
   }
 });
 
