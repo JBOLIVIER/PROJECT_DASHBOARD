@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
-const { UNITS, CAPTEURS }= require('../data.js');
+const { UNITS, VALID_CAPTEURS }= require('../data.js');
 
 router.get('/', async (req, res) => {
     try {
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        res.status(500).json({ error: 'Erreur serveur' });
+        res.status(500).json({ error: 'Erreur serveur live' });
     }
 });
 
@@ -37,16 +37,16 @@ router.get('/:list_capteur', async (req, res) => {
             if (!VALID_CAPTEURS.includes(list_capteur)) {
                 return res.status(400).json({ message: "A query argument is invalid" });
             }
-        } else {
-            const capteurs = list_capteur.split("-");
-
-            const capteursInvalides = capteurs.filter(capteur => !VALID_CAPTEURS.includes(capteur));
-            if (capteursInvalides.length > 0) {
-                return res.status(400).json({ message: "A query argument is invalid"});
-            }
         }
 
-        const { data: latestData, date } = await db.getLiveDataBySensor(list_capteur);
+        const capteurs = list_capteur.split("-");
+
+        const capteursInvalides = capteurs.filter(capteur => !VALID_CAPTEURS.includes(capteur));
+        if (capteursInvalides.length > 0) {
+            return res.status(400).json({ message: "A query argument is invalid"});
+        }
+        
+        const { data: latestData, date } = await db.getLiveDataBySensor(capteurs);
         
         // clé-valeur
         const data = latestData.reduce((acc, item) => {
@@ -70,10 +70,11 @@ router.get('/:list_capteur', async (req, res) => {
               ...data
           }
       };
-
+    
       res.json(response);
+      
   } catch (error) {
-      res.status(500).json({ error: 'Erreur serveur' });
+      res.status(500).json({ error: 'Erreur serveur de live capteur' });
   }
 });
 
