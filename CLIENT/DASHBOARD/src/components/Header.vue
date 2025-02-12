@@ -1,11 +1,12 @@
+import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header class="header">
     <h1>Mon Site</h1>
     <nav>
       <ul>
-        <li><a href="#">Accueil</a></li>
-        <li><a href="#">À Propos</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><RouterLink to="/">Home</RouterLink></li>
+        <li><RouterLink to="/about">About</RouterLink></li>
+        <li><RouterLink to="/FirstPage">FirstPage</RouterLink></li>
       </ul>
     </nav>
   </header>

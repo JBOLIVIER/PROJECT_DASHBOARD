@@ -54,3 +54,11 @@
   }
   </style>
   
+  <!-- props à rajouter 
+    props: {
+    message: {
+      type: {}, //dictionnaire label : TimeSeries (juste des valeurs, ou paire timestamp valeurs)
+      default: {},
+    },
+  },
+   -->
