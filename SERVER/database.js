@@ -3,7 +3,7 @@ const { UNITS, VALID_CAPTEURS }= require('./data.js');
 
 // Configuration
 const INFLUX_URL = 'http://localhost:8086';
-const INFLUX_TOKEN = process.env.INFLUXDB_TOKEN;
+const INFLUX_TOKEN = 'iKSFUC_DBgwRMwhGD3lOf_eY0aFhW3DwCcuAZbeUfHx1U-cnmfVURW5SF2Ch-YvpV_py9MQMH_8kNdiJZIBy-A==';
 const INFLUX_ORG = 'ign';
 const INFLUX_BUCKET = 'meteo';
 
