@@ -89,7 +89,7 @@ async function initDataPeriodically() {
 
         // Récupère à nouveau les données après 1 seconde
         data = await dataINIT(); 
-    }, 5000); // Intervalle de 1000 ms = 1 seconde
+    }, 20000); // Intervalle de 1000 ms = 1 seconde
 }
 
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
