@@ -1,7 +1,7 @@
 <!-- src/views/Station.vue -->
 <template>
     <div class="dashboard">
-      <h1>Dashboard Météo</h1>
+      <h1>Live</h1>
       <div class="cases">
         <!-- On utilise le component Case pour chaque donnée du JSON -->
         <Case v-if="data.temperature !== undefined" :data="data.temperature" :unite="unit.temperature" />
