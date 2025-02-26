@@ -1,99 +1,125 @@
 <template>
     <div class="dashboard">
       <h1>Dashboard Météo</h1>
-      <div class="cases-row">
-        <Case
-          v-if="data.temperature !== undefined"
-          title="Temperature"
-          :data="data.temperature"
-          :unite="unit.temperature"
-        />
-        <Case
-          v-if="data.pressure !== undefined"
-          title="Pressure"
-          :data="data.pressure"
-          :unite="unit.pressure"
-        />
-        <Case
-          v-if="data.humidity !== undefined"
-          title="Humidity"
-          :data="data.humidity"
-          :unite="unit.humidity"
-        />
-        <Case
-          v-if="data.luminosity !== undefined"
-          title="Luminosity"
-          :data="data.luminosity"
-          :unite="unit.luminosity"
-        />
-        <Case
-          v-if="data.wind_heading !== undefined"
-          title="Wind Heading"
-          :data="data.wind_heading"
-          :unite="unit.wind_heading"
-        />
-        <Case
-          v-if="data.wind_speed_avg !== undefined"
-          title="Wind Speed"
-          :data="data.wind_speed_avg"
-          :unite="unit.wind_speed_avg"
-        />
-        <Case
-          v-if="data.lat !== undefined"
-          title="Latitude"
-          :data="data.lat"
-          :unite="unit.lat"
-        />
-        <Case
-          v-if="data.lon !== undefined"
-          title="Longitude"
-          :data="data.lon"
-          :unite="unit.lon"
-        />
+      <div class="sensor-selector">
+        <h2>Sélection des capteurs</h2>
+        <div class="sensor-list">
+          <label v-for="sensor in availableSensors" :key="sensor">
+            <input
+              type="checkbox"
+              :value="sensor"
+              v-model="selectedSensors"
+            />
+            {{ sensor }}
+          </label>
+        </div>
       </div>
+      <CaseRow :sensorJson="fetchedData" />
     </div>
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
-  import Case from '../components/Case.vue';
+  import { ref, onMounted, watch } from 'vue';
+  import CaseRow from '../components/CaseRow.vue';
   
-  const data = ref({});
-  const unit = ref({});
+  const fetchedData = ref({
+    data: {},
+    unit: {},
+  });
   
+  const availableSensors = [
+    "temperature",
+    "pressure",
+    "humidity",
+    "rain",
+    "luminosity",
+    "wind_heading",
+    "wind_speed_avg",
+  ];
+  
+  const selectedSensors = ref([]);
+  
+  /**
+   * Fonction de fetch
+   * Construit l'URL en fonction des capteurs sélectionnés :
+   *   - Si aucun capteur n'est sélectionné : "/live"
+   *   - Si un ou plusieurs capteurs sont sélectionnés : "/live/sensor1-sensor2-..."
+   */
   const fetchData = async () => {
     try {
-      // Si vous avez configuré un proxy dans vite.config.js
-      // pour pointer vers http://localhost:3000
-      const response = await fetch('/live');
+      let route = "/live";
+      if (selectedSensors.value.length === 1) {
+        route += "/" + selectedSensors.value[0];
+      } else if (selectedSensors.value.length > 0) {
+        route += "/" + selectedSensors.value.join("-");
+      } else {
+        route += "/temperature-pressure-humidity-rain-luminosity-wind_heading-wind_speed_avg";
+      }
+      const response = await fetch(route);
       const json = await response.json();
-      data.value = json.data;
-      unit.value = json.unit;
+      fetchedData.value = json;
     } catch (error) {
-      console.error('Erreur lors de la récupération des données :', error);
+      console.error("Erreur lors de la récupération des données :", error);
     }
   };
   
   onMounted(() => {
     fetchData();
   });
+  
+  watch(selectedSensors, () => {
+    fetchData();
+  });
   </script>
   
   <style scoped>
-  .dashboard {
-    text-align: center;
-    margin: 1rem;
-  }
-  
-  /* Affiche toutes les cases sur une seule ligne,
-     avec éventuellement un scroll horizontal si ça ne rentre pas. */
-  .cases-row {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1rem;
-    overflow-x: auto;
-    margin: 1rem auto;
-    padding: 0 1rem; /* pour un peu d'espace sur les bords */
-  }
+    h1 {
+        margin: 5px;
+    }
+    h2 {
+        margin: 10px;
+    }
+
+    .dashboard {
+        text-align: center;
+        /* Retirer la hauteur fixe : laissez le contenu déterminer la hauteur */
+        margin: 1rem;
+    }
+
+    .sensor-selector {
+        /* Retirer la hauteur fixe */
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        height: auto;
+    }
+
+    /* Forcer les checkbox sur une seule ligne, 
+    avec défilement horizontal si nécessaire */
+    .sensor-list {
+        display: flex;
+        flex-wrap: nowrap;       /* Pas de retour à la ligne */
+        gap: 0.5rem;            /* Espacement entre les labels */
+        justify-content: center; /* Centre le contenu horizontalement */
+        overflow-x: auto;        /* Barre de défilement si ça dépasse */
+        white-space: nowrap;     /* Évite le passage à la ligne */
+        height: auto;
+    }
+
+    .sensor-list label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem;
+        padding: 0;
+        vertical-align: middle;
+    }
+
+    .sensor-list input[type="checkbox"] {
+        vertical-align: middle;
+        margin: 0;
+        width: 25px;
+        height: 25px;
+    }
+
   </style>
   
