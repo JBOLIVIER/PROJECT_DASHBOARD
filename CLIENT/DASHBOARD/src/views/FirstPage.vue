@@ -2,24 +2,30 @@
 import Footer from '../components/Footer.vue'
 import Header from '../components/Header.vue'
 import MAP from '../components/leafletMap.vue'
-import GRAPH from '../components/graphique.vue'
+import Graphs from '../components/Graphs.vue'
 
-const jsonData = {
-  data: {
-    "2025-02-24T12:24:40.000Z": { temperature: 9.99 },
-    "2025-02-24T12:25:00.000Z": { temperature: 9.99 },
-    "2025-02-24T12:25:20.000Z": { temperature: 9.99 },
-    "2025-02-24T12:25:40.000Z": { temperature: 9.99 },
-    "2025-02-24T12:26:00.000Z": { temperature: 9.99 },
-    "2025-02-24T12:26:20.000Z": { temperature: 9.99 },
-    "2025-02-24T12:26:40.000Z": { temperature: 9.99 },
-    "2025-02-24T12:27:00.000Z": { temperature: 9.99 },
-    "2025-02-24T12:27:20.000Z": { temperature: 9.99 },
-    "2025-02-24T12:27:40.000Z": { temperature: 9.99 },
-    "2025-02-24T12:28:00.000Z": { temperature: 9.99 },
-    "2025-02-24T12:28:20.000Z": { temperature: 9.99 },
-  }
-}
+// Exemple de données pour le graphique
+const timestamps = [
+  "2025-02-24T12:24:40.000Z",
+  "2025-02-24T12:25:00.000Z",
+  "2025-02-24T12:25:20.000Z",
+  "2025-02-24T12:25:40.000Z",
+  "2025-02-24T12:26:00.000Z",
+  "2025-02-24T12:26:20.000Z",
+];
+
+const values = [
+  9.99,
+  10.01,
+  10.05,
+  10.02,
+  10.00,
+  10.03,
+];
+
+// Nom du capteur et unité
+const sensorName = "Temperature";
+const unit = "°C";
 </script>
 
 <template>
@@ -29,9 +35,14 @@ const jsonData = {
   <map>
     <MAP />
   </map>
-  <graph>
-    <GRAPH :graphData="jsonData"/>
-  </graph>
+  <div class="chart-page">
+    <Graphique 
+      :title="sensorName" 
+      :unit="unit" 
+      :timestamps="timestamps" 
+      :values="values" 
+    />
+  </div>
   <footer>
     <Footer />
   </footer>

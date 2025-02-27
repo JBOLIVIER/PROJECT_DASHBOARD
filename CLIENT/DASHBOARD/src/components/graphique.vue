@@ -9,23 +9,35 @@ import { Chart, registerables } from "chart.js";
 export default {
   name: "ChartComponent",
   props: {
-    graphData: {
-      type: Object,
-      required: true
-    }
+    title: {
+      type: String,
+      required: true,
+    },
+    unit: {
+      type: String,
+      default: "",
+    },
+    timestamps: {
+      type: Array,
+      required: true,
+    },
+    values: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
       chart: null,
-    }
+    };
   },
   mounted() {
     Chart.register(...registerables);
     this.renderChart();
   },
   watch: {
-    // Si le JSON change, on détruit et recrée le graphique
-    graphData: {
+    // Re-crée le graphique dès que timestamps ou values changent
+    timestamps: {
       handler() {
         if (this.chart) {
           this.chart.destroy();
@@ -33,26 +45,28 @@ export default {
         this.renderChart();
       },
       deep: true,
-    }
+    },
+    values: {
+      handler() {
+        if (this.chart) {
+          this.chart.destroy();
+        }
+        this.renderChart();
+      },
+      deep: true,
+    },
   },
   methods: {
     renderChart() {
-      let labels = [];
-      let dataValues = [];
-      if (this.graphData && this.graphData.data) {
-        // On récupère les entrées sous forme de tableau et on trie par date
-        const entries = Object.entries(this.graphData.data);
-        entries.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-        labels = entries.map(([timestamp]) => timestamp);
-        dataValues = entries.map(([, value]) => value.temperature);
-      }
+      const labels = this.timestamps;
+      const dataValues = this.values;
       this.chart = new Chart(this.$refs.chartCanvas, {
         type: "line",
         data: {
           labels: labels,
           datasets: [
             {
-              label: "Évolution de la température",
+              label: `${this.title} (${this.unit})`,
               data: dataValues,
               borderColor: "blue",
               backgroundColor: "rgba(0, 0, 255, 0.2)",
@@ -81,13 +95,3 @@ export default {
   margin: auto;
 }
 </style>
-
-  
-  <!-- props à rajouter 
-    props: {
-    message: {
-      type: {}, //dictionnaire label : TimeSeries (juste des valeurs, ou paire timestamp valeurs)
-      default: {},
-    },
-  },
-   -->
