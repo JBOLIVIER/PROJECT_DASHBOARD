@@ -5,13 +5,8 @@ import MAP from '../components/leafletMap.vue'
 </script>
 
 <template>
-    <header>
-        <Header />
-    </header>
-    <map>
-        <MAP />
-    </map>
-    <footer>
-        <Footer />
-    </footer>
+    <Header />
+    <MAP />
+    <Footer />
 </template>
+
