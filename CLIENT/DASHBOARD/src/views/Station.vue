@@ -1,4 +1,7 @@
 <template>
+      <header>
+        <Header />
+    </header>
     <div class="dashboard">
       <h1>Dashboard Météo</h1>
 
@@ -32,12 +35,16 @@
       </div>
       <CaseRow :sensorJson="fetchedData" />
     </div>
+    <footer>
+    <Footer />
+  </footer>
   </template>
   
   <script setup>
   import { ref, onMounted, watch } from 'vue';
   import CaseRow from '../components/CaseRow.vue';
-  
+  import Footer from '../components/Footer.vue'
+  import Header from '../components/Header.vue'
   const fetchedData = ref({
     data: {},
     unit: {},
