@@ -2,7 +2,7 @@
 import Footer from '../components/Footer.vue'
 import Header from '../components/Header.vue'
 import MAP from '../components/leafletMap.vue'
-import Graphs from '../components/Graphs.vue'
+import Graphique from '../components/graphique.vue'
 
 // Exemple de données pour le graphique
 const timestamps = [
