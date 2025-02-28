@@ -1,11 +1,10 @@
 var express = require('express');
-var path = require('path');  // Importation du module 'path'
 var router = express.Router();
 
-/* GET home page. */
+/* GET home page and redirect to localhost:5173 */
 router.get('/', function (req, res, next) {
-  // Utilisation de __dirname et path.join pour obtenir le bon chemin
-  res.sendFile(path.join(__dirname, '../public/dist/index.html'));
+  // Redirect to the new URL (localhost:5173)
+  res.redirect('http://localhost:5173');
 });
 
 module.exports = router;
