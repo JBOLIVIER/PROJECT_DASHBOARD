@@ -50,11 +50,11 @@ async function dataINIT() {
     // Ajoute les mesures lat et lon
     data.measures.push({
         name: "lat",
-        value: lat
+        value: lat / 1000
     });
     data.measures.push({
         name: "lon",
-        value: lon
+        value: lon / 1000
     });
 
     // Ajout de la mesure de pluie
