@@ -1,9 +1,9 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
-const { UNITS, VALID_CAPTEURS }= require('./data.js');
+const { UNITS, VALID_CAPTEURS } = require('./data.js');
 
 // Configuration
 const INFLUX_URL = 'http://localhost:8086';
-const INFLUX_TOKEN = 'iKSFUC_DBgwRMwhGD3lOf_eY0aFhW3DwCcuAZbeUfHx1U-cnmfVURW5SF2Ch-YvpV_py9MQMH_8kNdiJZIBy-A==';
+const INFLUX_TOKEN = 'uTAeUuj_HbDjTE4AeButCDMiQ4IAFzmRXyXYRfpbhCjjhbf9C3tlwS-vhgDcoLqax1avKKxwWx30HTLtntXA5g==';
 const INFLUX_ORG = 'ign';
 const INFLUX_BUCKET = 'meteo';
 
@@ -89,7 +89,7 @@ const getSampleData = async (start, stop) => {
         |> range(start: ${startQuery}${stopQuery})
         |> filter(fn: (r) => r._measurement != "")
     `;
-    
+
 
     console.log(fluxQuery);
 
