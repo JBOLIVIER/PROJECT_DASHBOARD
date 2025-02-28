@@ -2,16 +2,16 @@
     <header>
       <Header />
     </header>
-    
+
     <div class="dashboard">
       <h1>Dashboard Météo</h1>
-      
+
       <!-- Sélection de la station -->
       <div class="station-selector">
         <h2>Sélection de la station</h2>
         <div class="station-list">
           <label v-for="station in availableStationsForStations" :key="station">
-            <input 
+            <input
               type="checkbox"
               :value="station"
               :checked="selectedStation === station"
@@ -21,7 +21,7 @@
           </label>
         </div>
       </div>
-      
+
       <!-- Sélection des capteurs -->
       <div class="sensor-selector">
         <h2>Sélection des capteurs</h2>
@@ -36,7 +36,7 @@
           </label>
         </div>
       </div>
-      
+
       <!-- Cases start et stop -->
       <div class="start-stop">
         <label>
@@ -44,31 +44,31 @@
           <input type="text" v-model="startValue" placeholder="start" />
         </label>
         <label>
-          Stop:
+          now:
           <input type="text" v-model="stopValue" placeholder="stop" />
         </label>
       </div>
-      
+
       <!-- Graphs (affichage des données) -->
-      <Graphs :sensorJson="fetchedData" />
+      <Graphs :graphsJson="fetchedData" />
     </div>
-    
+
     <footer>
       <Footer />
     </footer>
   </template>
-  
+
   <script setup>
   import { ref, onMounted, watch } from 'vue';
   import Graphs from '../components/Graphs.vue';
   import Footer from '../components/Footer.vue';
   import Header from '../components/Header.vue';
-  
+
   const fetchedData = ref({
     data: {},
     unit: {},
   });
-  
+
   const availableSensors = [
     "temperature",
     "pressure",
@@ -77,10 +77,12 @@
     "luminosity",
     "wind_heading",
     "wind_speed_avg",
+    "lat",
+    "lon",
   ];
-  
+
   const selectedSensors = ref([]);
-  
+
   const availableStationsForStations = [
     "piensg027",
     "piensg028",
@@ -88,14 +90,14 @@
     "piensg031",
     "piensg032",
   ];
-  
+
   // Station sélectionnée (par défaut "piensg030")
   const selectedStation = ref("piensg030");
-  
+
   // Valeurs start et stop (par défaut, à adapter)
   const startValue = ref("start");
   const stopValue = ref("stop");
-  
+
   const handleStationChange = (station, event) => {
     // Simule un comportement de bouton radio avec des checkboxes :
     if (selectedStation.value !== station) {
@@ -105,7 +107,7 @@
       event.preventDefault();
     }
   };
-  
+
   /**
    * Fonction de fetch.
    * Construit l'URL en fonction de :
@@ -116,16 +118,14 @@
    const fetchData = async () => {
     // Construire l'URL de base avec la station, start et stop
     let route = "http://" + selectedStation.value + ".ensg.eu:3000/sample/" + startValue.value + "/" + stopValue.value;
-    
+
     // Ajouter la partie capteurs
     if (selectedSensors.value.length === 1) {
         route += "/" + selectedSensors.value[0];
     } else if (selectedSensors.value.length > 0) {
         route += "/" + selectedSensors.value.join("-");
-    } else {
-        route += "/temperature-pressure-humidity-rain-luminosity-wind_heading-wind_speed_avg";
     }
-    
+
     console.log("Fetching data from", route);
     try {
         const response = await fetch(route);
@@ -136,17 +136,17 @@
     }
     };
 
-  
+
   onMounted(() => {
     fetchData();
   });
-  
+
   // Relance le fetch dès qu'une sélection change (station, capteurs, start ou stop)
   watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     fetchData();
   });
   </script>
-  
+
   <style scoped>
   h1 {
     margin: 5px;
@@ -154,12 +154,12 @@
   h2 {
     margin: 10px;
   }
-  
+
   .dashboard {
     text-align: center;
     margin: 1rem;
   }
-  
+
   /* Section station */
   .station-selector {
     margin-top: 2rem;
@@ -187,7 +187,7 @@
     height: 25px;
     margin: 0;
   }
-  
+
   /* Section capteurs */
   .sensor-selector {
     margin-top: 2rem;
@@ -217,7 +217,7 @@
     width: 25px;
     height: 25px;
   }
-  
+
   /* Section start-stop */
   .start-stop {
     display: flex;
@@ -237,4 +237,3 @@
     text-align: center;
   }
   </style>
-  
