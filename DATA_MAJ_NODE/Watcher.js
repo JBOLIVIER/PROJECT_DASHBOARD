@@ -89,9 +89,11 @@ async function initDataPeriodically() {
         insertWeatherData(data);
         console.log("data sended");
 
+
         // Récupère à nouveau les données après 20 seconde
         data = await dataINIT();
     }, 20000);
+
 }
 
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
