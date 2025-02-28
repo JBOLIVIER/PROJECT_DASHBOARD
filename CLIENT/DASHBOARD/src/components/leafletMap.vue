@@ -57,7 +57,7 @@ onMounted(()=> {
 
 <style scoped>
   #map {
-    height: 400px;
+    height: 600px;
     width: 100%;
   }
 </style>
