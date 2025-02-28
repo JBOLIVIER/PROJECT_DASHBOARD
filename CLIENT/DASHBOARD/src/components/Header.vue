@@ -1,7 +1,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header class="header">
-    <h1>Mon Site</h1>
+    <h1>METEO SITE</h1>
     <nav>
       <ul>
         <li><RouterLink to="/FirstPage">FirstPage</RouterLink></li>
@@ -14,25 +14,61 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
+/* Header Styling */
 .header {
-  background: #2c3e50;
+  background: #34495e; /* Darker shade of blue */
   color: white;
-  padding: 15px;
+  padding: 20px 30px;
   text-align: center;
 }
 
+.header h1 {
+  font-family: 'Arial', sans-serif;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Navigation Styling */
 nav ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 nav ul li {
-  display: inline;
-  margin: 0 10px;
+  display: inline-block;
+  margin: 0 15px;
 }
 
 nav ul li a {
-  color: white;
+  color: #ecf0f1; /* Lighter shade of white */
   text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #e74c3c; /* Red color on hover */
+  transform: translateY(-3px); /* Lift effect */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+
+  nav ul li {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .header h1 {
+    font-size: 2em;
+  }
 }
 </style>
