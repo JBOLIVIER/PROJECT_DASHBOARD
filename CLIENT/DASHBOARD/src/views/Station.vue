@@ -163,7 +163,7 @@ watch([selectedSensors, selectedStation], () => {
   .station-list input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    margin: 0;+
+    margin: 0;
     accent-color: #28a745;
   }
 
