@@ -7,9 +7,17 @@ router.get('/', async (req, res) => {
     try {
         const { data: latestData } = await db.getLiveData();
 
-        // clé-valeur
-        const data = latestData.reduce((acc, item) => {
+        // Transformer les données en un objet clé-valeur
+        const dataMap = latestData.reduce((acc, item) => {
             acc[item._measurement] = item._value;
+            return acc;
+        }, {});
+
+        // Forcer l'ordre des clés selon UNITS
+        const orderedData = Object.keys(UNITS).reduce((acc, key) => {
+            if (dataMap[key] !== undefined) {
+                acc[key] = dataMap[key];
+            }
             return acc;
         }, {});
 
@@ -18,7 +26,7 @@ router.get('/', async (req, res) => {
             unit: UNITS,
             data: {
                 date: new Date().toISOString(),
-                ...data
+                ...orderedData
             }
         };
 
@@ -27,6 +35,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur live' });
     }
 });
+
 
 // Route /live/{list_capteur}
 router.get('/:list_capteur', async (req, res) => {
@@ -48,10 +57,18 @@ router.get('/:list_capteur', async (req, res) => {
         
         const { data: latestData } = await db.getLiveDataBySensor(capteurs);
         
-        // clé-valeur
-        const data = latestData.reduce((acc, item) => {
-          acc[item._measurement] = item._value;
-          return acc;
+        // Transformer les données en un objet clé-valeur
+        const dataMap = latestData.reduce((acc, item) => {
+            acc[item._measurement] = item._value;
+            return acc;
+        }, {});
+
+        // Forcer l'ordre des clés selon UNITS
+        const orderedData = Object.keys(UNITS).reduce((acc, key) => {
+            if (dataMap[key] !== undefined) {
+                acc[key] = dataMap[key];
+            }
+            return acc;
         }, {});
 
         // Unités des capteurs demandés
@@ -67,7 +84,7 @@ router.get('/:list_capteur', async (req, res) => {
           unit: filteredUnits,
           data: {
               date: new Date().toISOString(),
-              ...data
+              ...orderedData
           }
       };
     

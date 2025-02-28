@@ -25,7 +25,11 @@ router.get('/:start/:stop', async (req, res) => {
             const formattedDate = date.toISOString();
 
             if (!response.data[formattedDate]) {
-                response.data[formattedDate] = {};
+                // Initialiser un objet avec les clés de UNITS dans l'ordre
+                response.data[formattedDate] = Object.keys(UNITS).reduce((acc, key) => {
+                    acc[key] = null; // Valeur par défaut si absente
+                    return acc;
+                }, {});
             }
 
             response.data[formattedDate][entry._measurement] = entry._value;
@@ -37,6 +41,7 @@ router.get('/:start/:stop', async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur start-stop' });
     }
 });
+
 
 
 // Route /sample/{start}/{stop}/{list_capteur}
@@ -59,9 +64,16 @@ router.get('/:start/:stop/:list_capteur', async (req, res) => {
 
         const rawData = await db.getSampleDataBySensor(start, stop, capteurs);
 
+        const filteredUnits = Object.keys(UNITS)
+            .filter(key => capteurs.includes(key))
+            .reduce((acc, key) => {
+                acc[key] = UNITS[key];
+                return acc;
+            }, {});
+
         const response = {
             id: 30,
-            unit: UNITS,
+            unit: filteredUnits,
             data: {}
         };
 
@@ -72,7 +84,11 @@ router.get('/:start/:stop/:list_capteur', async (req, res) => {
             const formattedDate = date.toISOString();
 
             if (!response.data[formattedDate]) {
-                response.data[formattedDate] = {};
+                // Initialiser un objet avec les clés de UNITS dans l'ordre
+                response.data[formattedDate] = Object.keys(filteredUnits).reduce((acc, key) => {
+                    acc[key] = null; // Valeur par défaut si absente
+                    return acc;
+                }, {});
             }
 
             response.data[formattedDate][entry._measurement] = entry._value;
