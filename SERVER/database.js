@@ -84,10 +84,14 @@ const getSampleData = async (start, stop) => {
     console.log("startQuery :", startQuery);
     console.log("stopQuery :", stopQuery);
 
+    const filterMeasurements = VALID_CAPTEURS.map(
+        capteur => `r._measurement == "${capteur}"`
+    ).join(" or ");
+
     const fluxQuery = `
         from(bucket: "${INFLUX_BUCKET}")
         |> range(start: ${startQuery}${stopQuery})
-        |> filter(fn: (r) => r._measurement != "")
+        |> filter(fn: (r) => ${filterMeasurements})
     `;
     
 
