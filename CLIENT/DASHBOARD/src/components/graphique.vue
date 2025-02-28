@@ -33,16 +33,24 @@ export default {
   },
   mounted() {
     Chart.register(...registerables);
-    this.renderChart();
+    this.$nextTick(() => {
+      this.renderChart();
+    });
+  },
+  beforeUnmount() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   },
   watch: {
-    // Re-crée le graphique dès que timestamps ou values changent
     timestamps: {
       handler() {
         if (this.chart) {
           this.chart.destroy();
         }
-        this.renderChart();
+        this.$nextTick(() => {
+          this.renderChart();
+        });
       },
       deep: true,
     },
@@ -51,7 +59,9 @@ export default {
         if (this.chart) {
           this.chart.destroy();
         }
-        this.renderChart();
+        this.$nextTick(() => {
+          this.renderChart();
+        });
       },
       deep: true,
     },
@@ -60,7 +70,12 @@ export default {
     renderChart() {
       const labels = this.timestamps;
       const dataValues = this.values;
-      this.chart = new Chart(this.$refs.chartCanvas, {
+      const canvas = this.$refs.chartCanvas;
+      if (!canvas) {
+        console.error("Canvas introuvable !");
+        return;
+      }
+      this.chart = new Chart(canvas, {
         type: "line",
         data: {
           labels: labels,
@@ -76,6 +91,29 @@ export default {
         },
         options: {
           responsive: true,
+          scales: {
+            x: {
+              ticks: {
+                callback: (value, index, ticks) => {
+                  // value correspond à la chaîne ISO de notre label
+                  const d = new Date(value);
+                  // Format : "DD/MM/YYYY HH:mm"
+                  return (
+                    d.toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }) +
+                    " " +
+                    d.toLocaleTimeString("fr-FR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  );
+                },
+              },
+            },
+          },
           plugins: {
             legend: {
               display: true,

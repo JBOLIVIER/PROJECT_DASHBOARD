@@ -3,7 +3,7 @@
     <Header />
   </header>
   <div class="dashboard">
-    <h1>Dashboard Météo</h1>
+    <h1>Live</h1>
 
     <div class="station-selector">
       <h2>Sélection de la station</h2>

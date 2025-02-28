@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
-const { UNITS, VALID_CAPTEURS }= require('../data.js');
+const { UNITS, VALID_CAPTEURS } = require('../data.js');
 
 // Route /sample/:start/:stop
 router.get('/:start/:stop', async (req, res) => {
@@ -32,7 +32,9 @@ router.get('/:start/:stop', async (req, res) => {
                 }, {});
             }
 
-            response.data[formattedDate][entry._measurement] = entry._value;
+            response.data[formattedDate][entry._measurement] = entry._value !== null
+                ? parseFloat(entry._value.toFixed(3))
+                : null;
         });
 
         res.json(response);
@@ -48,7 +50,7 @@ router.get('/:start/:stop', async (req, res) => {
 router.get('/:start/:stop/:list_capteur', async (req, res) => {
     try {
         const { start, stop, list_capteur } = req.params;
-        
+
         if (!list_capteur.includes('-')) {
             if (!VALID_CAPTEURS.includes(list_capteur)) {
                 return res.status(400).json({ message: "A query argument is invalid" });
@@ -59,7 +61,7 @@ router.get('/:start/:stop/:list_capteur', async (req, res) => {
 
         const capteursInvalides = capteurs.filter(capteur => !VALID_CAPTEURS.includes(capteur));
         if (capteursInvalides.length > 0) {
-            return res.status(400).json({ message: "A query argument is invalid"});
+            return res.status(400).json({ message: "A query argument is invalid" });
         }
 
         const rawData = await db.getSampleDataBySensor(start, stop, capteurs);
@@ -91,7 +93,9 @@ router.get('/:start/:stop/:list_capteur', async (req, res) => {
                 }, {});
             }
 
-            response.data[formattedDate][entry._measurement] = entry._value;
+            response.data[formattedDate][entry._measurement] = entry._value !== null
+                ? parseFloat(entry._value.toFixed(3))
+                : null;
         });
 
         res.json(response);
