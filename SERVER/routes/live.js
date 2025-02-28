@@ -15,7 +15,9 @@ router.get('/', async (req, res) => {
 
         // Forcer l'ordre des clés selon UNITS et arrondir les valeurs à 3 décimales
         const orderedData = Object.keys(UNITS).reduce((acc, key) => {
-            acc[key] = parseFloat(dataMap[key].toFixed(3)); // Arrondi à 3 décimales
+            if (dataMap[key] !== undefined) {
+                acc[key] = parseFloat(dataMap[key].toFixed(3)); // Arrondi à 3 décimales
+            }
             return acc;
         }, {});
 
@@ -64,7 +66,9 @@ router.get('/:list_capteur', async (req, res) => {
 
         // Forcer l'ordre des clés selon UNITS
         const orderedData = Object.keys(UNITS).reduce((acc, key) => {
-            acc[key] = parseFloat(dataMap[key].toFixed(3));
+            if (dataMap[key] !== undefined) {
+                acc[key] = parseFloat(dataMap[key].toFixed(3));
+            }
             return acc;
         }, {});
 

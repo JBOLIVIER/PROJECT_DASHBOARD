@@ -32,6 +32,7 @@ router.get('/:start/:stop', async (req, res) => {
                 }, {});
             }
 
+            // Arrondi à 3 décimales si c'est un nombre
             response.data[formattedDate][entry._measurement] = entry._value !== null
                 ? parseFloat(entry._value.toFixed(3))
                 : null;
@@ -43,6 +44,7 @@ router.get('/:start/:stop', async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur start-stop' });
     }
 });
+
 
 
 
