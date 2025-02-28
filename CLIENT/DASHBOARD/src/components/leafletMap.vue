@@ -43,7 +43,6 @@ onMounted(()=> {
       StationsLoc[availableStations[i]] = results[i];
     }
   }
-  map.setView([StationsLoc["piensg028"]["data"]["lat"],StationsLoc["piensg028"]["data"]["lon"]], map.getZoom());
 })
 .then(() => {
   Object.keys(StationsLoc).forEach(function(key) {
@@ -57,7 +56,7 @@ onMounted(()=> {
 
 <style scoped>
   #map {
-    height: 400px;
+    height: 600px;
     width: 100%;
   }
 </style>
