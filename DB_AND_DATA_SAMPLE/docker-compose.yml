@@ -13,3 +13,4 @@ services:
     volumes:
       - "$PWD/data:/var/lib/influxdb2"
       - "$PWD/config:/etc/influxdb2"
+
