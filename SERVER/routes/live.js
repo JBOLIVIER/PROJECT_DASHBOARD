@@ -58,15 +58,13 @@ router.get('/:list_capteur', async (req, res) => {
 
         // Transformer les données en un objet clé-valeur
         const dataMap = latestData.reduce((acc, item) => {
-            acc[key] = parseFloat(dataMap[key].toFixed(3));
+            acc[item._measurement] = item._value;
             return acc;
         }, {});
 
         // Forcer l'ordre des clés selon UNITS
         const orderedData = Object.keys(UNITS).reduce((acc, key) => {
-            if (dataMap[key] !== undefined) {
-                acc[key] = dataMap[key];
-            }
+            acc[key] = parseFloat(dataMap[key].toFixed(3));
             return acc;
         }, {});
 
