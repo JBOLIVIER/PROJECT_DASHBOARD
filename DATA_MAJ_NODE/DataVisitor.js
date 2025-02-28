@@ -1,7 +1,7 @@
 const fs = require('fs');
 const NMEA = require('nmea');
 
-const processSensorData = (filePath) => {
+async function processSensorData(filePath) {
     // Lire le fichier texte contenant le JSON
     const data = fs.readFileSync(filePath, 'utf8');
 
@@ -11,7 +11,7 @@ const processSensorData = (filePath) => {
 
         // Créer un nouvel objet avec la structure souhaitée
         const outputData = {
-            timestamp: inputData.date,  // Date du timestamp
+            timestamp: inputData.date, // Date du timestamp
             measures: []
         };
 
@@ -19,7 +19,7 @@ const processSensorData = (filePath) => {
         inputData.measure.forEach(measure => {
             outputData.measures.push({
                 name: measure.name,
-                value: Number(measure.value) 
+                value: Number(measure.value)
             });
         });
 
@@ -28,9 +28,9 @@ const processSensorData = (filePath) => {
 
     } catch (e) {
         console.error('Erreur de parsing JSON:', e);
-        return null;  // Retourne null en cas d'erreur
+        return null; // Retourne null en cas d'erreur
     }
-};
+}
 
 const processNmeaData = (filePath) => {
     return new Promise((resolve, reject) => {
@@ -41,13 +41,13 @@ const processNmeaData = (filePath) => {
 
             const gpggaLine = data.split('\n').find(line => line.startsWith('$GPGGA'));
             const { lat, lon } = NMEA.parse(gpggaLine) || {};
-            
+
             resolve([lat, lon]); // On résout la promesse avec lat et lon
         });
     });
 };
 
-const processTphData = (filePath,hygr,press) => {
+const processTphData = (filePath, hygr, press) => {
     const data = fs.readFileSync(filePath, 'utf8');
 
     try {
@@ -56,18 +56,21 @@ const processTphData = (filePath,hygr,press) => {
 
         hygrNEW = Number(data.hygro);
         pressNEW = Number(data.press);
+
         if (hygr === 0) {
-            return [(hygr + hygrNEW)/2 , (press + pressNEW)/2]
+            return [(hygr + hygrNEW) / 2, (press + pressNEW) / 2]
         } else {
             return [hygrNEW, pressNEW]
         }
-        
+
     } catch (e) {
         console.error('Erreur de parsing JSON:', e);
         return null;  // Retourne null en cas d'erreur
     }
 };
 
-module.exports = { processSensorData,
-                   processNmeaData,
-                   processTphData };
+module.exports = {
+    processSensorData,
+    processNmeaData,
+    processTphData
+};

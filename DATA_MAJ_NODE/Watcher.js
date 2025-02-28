@@ -28,6 +28,8 @@ const TPHfilePath = '/dev/shm/tph.log';
 const NMEAfilePath = '/dev/shm/gpsNmea';
 const RAINfilePath = '/dev/shm/rainCounter.log';
 
+
+
 // data initialization
 async function dataINIT() {
     let data = await processSensorData(SENSORfilePath); // Attend que processSensorData termine
@@ -87,9 +89,9 @@ async function initDataPeriodically() {
         insertWeatherData(data);
         console.log("data sended");
 
-        // Récupère à nouveau les données après 1 seconde
-        data = await dataINIT(); 
-    }, 20000); // Intervalle de 1000 ms = 1 seconde
+        // Récupère à nouveau les données après 20 seconde
+        data = await dataINIT();
+    }, 20000);
 }
 
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
@@ -98,12 +100,14 @@ console.log(`Surveillance des fichiers démarrée...`);
 
 // Fonction pour la mise à jour des données du capteur
 async function SensorDataUpdate(data) {
-    let datamaj = await processSensorData(SENSORfilePath); // Assure-toi que cette fonction soit asynchrone
-    datamaj.measures.forEach(newmeasure => {
-        let M_name = newmeasure.name;
-        let measureTochange = data.measures.find(measure => measure.name === M_name);
-        if (measureTochange) {
-            measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
-        }
-    });
+    let datamaj = processSensorData(SENSORfilePath)
+        .then(() => {
+            datamaj.measures.forEach(newmeasure => {
+                let M_name = newmeasure.name;
+                let measureTochange = data.measures.find(measure => measure.name === M_name);
+                if (measureTochange) {
+                    measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
+                }
+            });
+        });
 }
