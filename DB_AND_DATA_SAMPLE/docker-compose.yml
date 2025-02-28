@@ -9,8 +9,8 @@ services:
       DOCKER_INFLUXDB_INIT_PASSWORD: ensg2025
       DOCKER_INFLUXDB_INIT_ORG: ign
       DOCKER_INFLUXDB_INIT_BUCKET: meteo
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: iKSFUC_DBgwRMwhGD3lOf_eY0aFhW3DwCcuAZbeUfHx1U-cnmfVURW5SF2Ch-YvpV_py9MQMH_8kNdiJZIBy-A==
     volumes:
       - "$PWD/data:/var/lib/influxdb2"
       - "$PWD/config:/etc/influxdb2"
-
 

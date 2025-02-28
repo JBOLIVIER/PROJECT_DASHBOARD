@@ -3,4 +3,5 @@ DB_AND_DATA_SAMPLE/data
 DB_AND_DATA_SAMPLE/shm
 SERVER/node_modules/
 DATA_MAJ_NODE/node_modules
-CLIENT/node_modules
+CLIENT/WebMeteoDashBoard/node_modules
+CLIENT/WebMeteoDashBoard/.vscode
