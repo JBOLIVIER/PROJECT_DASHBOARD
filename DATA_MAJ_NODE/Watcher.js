@@ -99,17 +99,22 @@ async function initDataPeriodically() {
 initDataPeriodically(); // Démarrer l'initialisation périodique des données
 
 console.log(`Surveillance des fichiers démarrée...`);
-
+let datamaj;
 // Fonction pour la mise à jour des données du capteur
 async function SensorDataUpdate(data) {
-    let datamaj = processSensorData(SENSORfilePath)
-        .then(() => {
-            datamaj.measures.forEach(newmeasure => {
-                let M_name = newmeasure.name;
-                let measureTochange = data.measures.find(measure => measure.name === M_name);
-                if (measureTochange) {
-                    measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
-                }
-            });
-        });
+    // Attendre que la promesse de `processSensorData` soit résolue
+    datamaj = await processSensorData(SENSORfilePath);
+    console.log("datamaj : ", datamaj)
+    // Parcourir les mesures dans `datamaj.measures`
+    datamaj.measures.forEach(newmeasure => {
+        let M_name = newmeasure.name;
+
+        // Trouver la mesure correspondante dans les données entrantes
+        let measureTochange = data.measures.find(measure => measure.name === M_name);
+
+        if (measureTochange) {
+            // Calculer la nouvelle valeur moyenne
+            measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
+        }
+    });
 }
