@@ -42,6 +42,7 @@ async function dataINIT() {
     return data;
 };
 
+// PERIODIC WATCHER
 async function initDataPeriodically() {
     let data = await dataINIT();
     const SENSORwatcher = chokidar.watch(SENSORfilePath, {});
@@ -63,7 +64,7 @@ async function initDataPeriodically() {
 
 
         data = await dataINIT();
-    }, 20000); // Timer d'écriture : 20sec
+    }, 20000); // Writing timer : 20sec
 
 }
 

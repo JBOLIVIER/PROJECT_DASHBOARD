@@ -18,6 +18,7 @@ const router = createRouter({
       name: 'FirstPage',
       component: FirstPage,
     },
+    // LIVE SENSORS
     {
       path: '/Station',
       name: 'Station',
@@ -28,6 +29,7 @@ const router = createRouter({
       name: 'MAP',
       component: StationMap,
     },
+    // SAMPLE SENSORS
     {
       path: '/Evolution',
       name: 'Evolution',

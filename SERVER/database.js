@@ -1,16 +1,19 @@
+/*
+DATABASE PROCESSING : RETURN BRUT JSON
+*/
+
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
 const { UNITS, VALID_CAPTEURS } = require('./data.js');
 
-// Configuration
 const INFLUX_URL = 'http://localhost:8086';
 const INFLUX_TOKEN = 'uTAeUuj_HbDjTE4AeButCDMiQ4IAFzmRXyXYRfpbhCjjhbf9C3tlwS-vhgDcoLqax1avKKxwWx30HTLtntXA5g==';
 const INFLUX_ORG = 'ign';
 const INFLUX_BUCKET = 'meteo';
 
-// Initialisation du client InfluxDB
 const influxDB = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN });
 const queryApi = influxDB.getQueryApi(INFLUX_ORG);
 
+// LIVE
 const getLiveData = async () => {
     const filterMeasurements = VALID_CAPTEURS.map(
         capteur => `r._measurement == "${capteur}"`
@@ -43,7 +46,7 @@ const getLiveData = async () => {
     });
 };
 
-
+// LIVE-SENSOR
 const getLiveDataBySensor = async (capteurs) => {
     const filterMeasurements = capteurs.map(capteur => `r._measurement == "${capteur}"`).join(" or ");
 
@@ -71,13 +74,13 @@ const getLiveDataBySensor = async (capteurs) => {
     });
 };
 
+// SAMPLE
 const getSampleData = async (start, stop) => {
 
     if (typeof start !== "string" || (stop !== "now" && typeof stop !== "string")) {
         throw new Error("Les paramètres start et stop doivent être des chaînes de caractères.");
     }
 
-    // Vérification et conversion en format compatible avec InfluxDB
     const startQuery = `time(v: ${JSON.stringify(start)})`;
     const stopQuery = stop === "now" ? "" : `, stop: time(v: ${JSON.stringify(stop)})`;
 
@@ -118,12 +121,12 @@ const getSampleData = async (start, stop) => {
     });
 };
 
+// SAMPLE-SENSORS
 const getSampleDataBySensor = async (start, stop, capteurs) => {
     if (typeof start !== "string" || (stop !== "now" && typeof stop !== "string")) {
         throw new Error("Les paramètres start et stop doivent être des chaînes de caractères.");
     }
 
-    // Vérification et conversion en format compatible avec InfluxDB
     const startQuery = `time(v: ${JSON.stringify(start)})`;
     const stopQuery = stop === "now" ? "" : `, stop: time(v: ${JSON.stringify(stop)})`;
 

@@ -1,3 +1,4 @@
+// UNITS OF THE PROJECT
 const UNITS = {
     temperature: "C",
     pressure: "hP",
@@ -10,6 +11,7 @@ const UNITS = {
     lon: "DD"
 };
 
+// ASSOCIATED SENSORS
 const VALID_CAPTEURS = Object.keys(UNITS);
 
 module.exports = { UNITS, VALID_CAPTEURS };
