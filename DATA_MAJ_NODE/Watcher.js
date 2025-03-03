@@ -106,15 +106,18 @@ async function SensorDataUpdate(data) {
     datamaj = await processSensorData(SENSORfilePath);
     console.log("datamaj : ", datamaj)
     // Parcourir les mesures dans `datamaj.measures`
-    datamaj.measures.forEach(newmeasure => {
-        let M_name = newmeasure.name;
+    if (datamaj) {
+        datamaj.measures.forEach(newmeasure => {
+            let M_name = newmeasure.name;
 
-        // Trouver la mesure correspondante dans les données entrantes
-        let measureTochange = data.measures.find(measure => measure.name === M_name);
+            // Trouver la mesure correspondante dans les données entrantes
+            let measureTochange = data.measures.find(measure => measure.name === M_name);
 
-        if (measureTochange) {
-            // Calculer la nouvelle valeur moyenne
-            measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
-        }
-    });
+            if (measureTochange) {
+                // Calculer la nouvelle valeur moyenne
+                measureTochange.value = (Number(measureTochange.value) + Number(newmeasure.value)) / 2;
+            }
+        });
+    }
+
 }
