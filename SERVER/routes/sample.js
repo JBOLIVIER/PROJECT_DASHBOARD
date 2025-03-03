@@ -25,14 +25,12 @@ router.get('/:start/:stop', async (req, res) => {
             const formattedDate = date.toISOString();
 
             if (!response.data[formattedDate]) {
-                // Initialiser un objet avec les clés de UNITS dans l'ordre
                 response.data[formattedDate] = Object.keys(UNITS).reduce((acc, key) => {
-                    acc[key] = null; // Valeur par défaut si absente
+                    acc[key] = null;
                     return acc;
                 }, {});
             }
 
-            // Arrondi à 3 décimales si c'est un nombre
             response.data[formattedDate][entry._measurement] = entry._value !== null
                 ? parseFloat(entry._value.toFixed(3))
                 : null;
@@ -88,9 +86,8 @@ router.get('/:start/:stop/:list_capteur', async (req, res) => {
             const formattedDate = date.toISOString();
 
             if (!response.data[formattedDate]) {
-                // Initialiser un objet avec les clés de UNITS dans l'ordre
                 response.data[formattedDate] = Object.keys(filteredUnits).reduce((acc, key) => {
-                    acc[key] = null; // Valeur par défaut si absente
+                    acc[key] = null;
                     return acc;
                 }, {});
             }

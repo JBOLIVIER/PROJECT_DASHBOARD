@@ -1,5 +1,4 @@
 <template>
-  <!-- Si des données existent, on affiche le conteneur scrollable -->
   <div class="graphs-container" v-if="graphsJson && graphsJson.data && Object.keys(graphsJson.data).length">
     <div class="graphs">
       <div
@@ -7,11 +6,11 @@
         :key="sensorName"
         class="graph-wrapper"
       >
-        <Graphique 
-          :title="sensorName" 
-          :unit="graphsJson.unit[sensorName] || ''" 
-          :timestamps="timestamps" 
-          :values="sensorValues" 
+        <Graphique
+          :title="sensorName"
+          :unit="graphsJson.unit[sensorName] || ''"
+          :timestamps="timestamps"
+          :values="sensorValues"
         />
       </div>
     </div>
@@ -32,7 +31,6 @@ const props = defineProps({
   },
 });
 
-// Calculer la liste des timestamps triés à partir de graphsJson.data
 const timestamps = computed(() => {
   if (!props.graphsJson.data) return [];
   const times = Object.keys(props.graphsJson.data);
@@ -40,7 +38,6 @@ const timestamps = computed(() => {
   return times;
 });
 
-// Déterminer la liste des capteurs présents à partir du premier enregistrement
 const sensorKeys = computed(() => {
   if (!props.graphsJson.data) return [];
   const times = timestamps.value;
@@ -48,7 +45,6 @@ const sensorKeys = computed(() => {
   return Object.keys(props.graphsJson.data[times[0]] || {});
 });
 
-// Pour chaque capteur, construire le tableau de valeurs sur l'ensemble des timestamps
 const sensorsData = computed(() => {
   const result = {};
   const times = timestamps.value;
@@ -60,26 +56,23 @@ const sensorsData = computed(() => {
 </script>
 
 <style scoped>
-/* Conteneur scrollable pour l'ensemble des graphiques */
 .graphs-container {
   overflow-y: auto;
   padding: 1rem;
-  max-height: 80vh; /* Vous pouvez ajuster cette hauteur si nécessaire */
+  max-height: 80vh;
 }
 
-/* Grille à 2 colonnes avec des dimensions fixes pour chaque graphique */
 .graphs {
   display: grid;
-  grid-template-columns: repeat(2, 600px); /* Augmenté de 400px à 600px */
-  grid-auto-rows: 400px; /* Augmenté de 300px à 400px */
+  grid-template-columns: repeat(2, 600px);
+  grid-auto-rows: 400px;
   gap: 1rem;
   justify-content: center;
 }
 
-/* Style de chaque wrapper de graphique */
 .graph-wrapper {
-  width: 600px; /* Même largeur que la colonne */
-  height: 300px; /* Même hauteur que la ligne */
+  width: 600px;
+  height: 300px;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0.5rem;

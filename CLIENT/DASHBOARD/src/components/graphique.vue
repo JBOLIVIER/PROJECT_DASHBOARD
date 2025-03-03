@@ -95,9 +95,7 @@ export default {
             x: {
               ticks: {
                 callback: (value, index, ticks) => {
-                  // value correspond à la chaîne ISO de notre label
                   const d = new Date(value);
-                  // Format : "DD/MM/YYYY HH:mm"
                   return (
                     d.toLocaleDateString("fr-FR", {
                       day: "2-digit",

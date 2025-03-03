@@ -6,26 +6,24 @@
 
 <style scoped>
 
-/* Footer Styling */
 .footer {
-  background: #34495e; /* Darker blue shade to match header */
-  color: #ecf0f1; /* Lighter shade of white */
+  background: #34495e;
+  color: #ecf0f1;
   text-align: center;
   padding: 30px;
-  margin-top: 0% ; /* Push footer to the bottom */
+  margin-top: 0% ;
   font-family: 'Arial', sans-serif;
   font-size: 1em;
   letter-spacing: 1px;
   position: relative;
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-shrink: 0;
 }
 
-/* Footer Text Styling */
 .footer p {
   margin: 0;
   padding: 0;
   font-weight: 400;
-  color: #bdc3c7; /* Slightly lighter gray for text contrast */
+  color: #bdc3c7;
 }
 
 </style>

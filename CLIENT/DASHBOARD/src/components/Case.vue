@@ -7,7 +7,7 @@
       </div>
     </div>
   </template>
-  
+
   <script setup>
     import { computed } from 'vue';
     import { defineProps } from 'vue';
@@ -38,7 +38,7 @@
         // Retourne l'heure sur la première ligne et la date sur la deuxième
         return timeStr + "\n" + dateStr;
     }
-    
+
     // Sinon, on essaie de convertir en nombre
     const numericValue = parseFloat(props.data);
     if (!isNaN(numericValue)) {
@@ -48,13 +48,12 @@
         return numericValue.toFixed(2);
         }
     }
-    
-    // Si ce n'est ni une date ni un nombre, renvoyer la valeur brute
+
     return props.data;
     });
   </script>
 
-  
+
   <style scoped>
   .case-container {
     background-color: #1b3c51;
@@ -70,27 +69,25 @@
     justify-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
-  
+
   .case-title {
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
     opacity: 0.9;
   }
-  
+
   .case-value {
     font-size: 2rem;
     font-weight: 700;
-    /* Permet d'afficher les retours à la ligne (pour le cas date) */
     white-space: pre-line;
     text-align: center;
     align-items: baseline;
     gap: 0.2rem;
   }
-  
+
   .unit {
     font-size: 1rem;
     opacity: 0.8;
   }
   </style>
-  

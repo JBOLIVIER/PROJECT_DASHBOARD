@@ -54,7 +54,6 @@
       </div>
     </div>
 
-    <!-- Graphs (affichage des données) -->
     <Graphs :graphsJson="fetchedData" />
   </div>
 
@@ -99,11 +98,9 @@ const availableStationsForStations = [
 
 const selectedStation = ref("piensg030");
 
-// Les valeurs de start et stop, initialement vides
 const startValue = ref("");
 const stopValue = ref("");
 
-// Variable pour indiquer si l'on veut utiliser "now" pour stopValue
 const useNow = ref(false);
 
 const handleStationChange = (station, event) => {
@@ -114,14 +111,12 @@ const handleStationChange = (station, event) => {
   }
 };
 
-// Si la checkbox "Now" est cochée, on met à jour stopValue avec l'heure actuelle
 watch(useNow, (newVal) => {
   if (newVal) {
     stopValue.value = new Date().toISOString();
   }
 });
 
-// Fonction de fetch qui construit l'URL en fonction des valeurs
 const fetchData = async () => {
   let route =
     "http://" +
@@ -165,32 +160,32 @@ watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
-  
+
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
     color: #34495e;
   }
-  
+
   h2 {
     font-size: 1.5rem;
     margin: 20px 0;
     color: #34495e;
   }
-  
+
   /* Section Station */
   .station-selector {
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
-  
+
   .station-list {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
   }
-  
+
   .station-list label {
     display: inline-flex;
     align-items: center;
@@ -198,20 +193,20 @@ watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     font-size: 1rem;
     cursor: pointer;
   }
-  
+
   .station-list input[type="checkbox"] {
     width: 20px;
     height: 20px;
     margin: 0;
     accent-color: #28a745;
   }
-  
+
   /* Section Capteurs */
   .sensor-selector {
     margin-top: 2rem;
     margin-bottom: 2rem;
   }
-  
+
   .sensor-list {
     display: flex;
     flex-wrap: wrap;
@@ -219,7 +214,7 @@ watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     justify-content: center;
     overflow-x: auto;
   }
-  
+
   .sensor-list label {
     display: inline-flex;
     align-items: center;
@@ -227,26 +222,26 @@ watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     font-size: 1rem;
     cursor: pointer;
   }
-  
+
   .sensor-list input[type="checkbox"] {
     width: 20px;
     height: 20px;
     margin: 0;
     accent-color: #28a745;
   }
-  
+
   /* Hover Effects */
   .station-list input[type="checkbox"]:hover,
   .sensor-list input[type="checkbox"]:hover {
     transform: scale(1.1);
     transition: 0.2s ease-in-out;
   }
-  
+
   .station-list label:hover,
   .sensor-list label:hover {
     color: #fff;
   }
-  
+
   /* Section Start-Stop */
   .start-stop {
     display: flex;
@@ -255,19 +250,17 @@ watch([selectedSensors, selectedStation, startValue, stopValue], () => {
     gap: 1rem;
     margin-bottom: 2rem;
   }
-  
+
   .stop-date {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-  
+
   .now-checkbox {
     display: flex;
     align-items: center;
     gap: 0.3rem;
   }
-  
-  /* DatePicker styles peuvent être définis dans son composant propre */
 </style>
 

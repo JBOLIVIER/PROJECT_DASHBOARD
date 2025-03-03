@@ -3,20 +3,19 @@ const router = express.Router();
 const db = require('../database');
 const { UNITS, VALID_CAPTEURS } = require('../data.js');
 
+// Route /live
 router.get('/', async (req, res) => {
     try {
         const { data: latestData } = await db.getLiveData();
 
-        // Transformer les données en un objet clé-valeur
         const dataMap = latestData.reduce((acc, item) => {
             acc[item._measurement] = item._value;
             return acc;
         }, {});
 
-        // Forcer l'ordre des clés selon UNITS et arrondir les valeurs à 3 décimales
         const orderedData = Object.keys(UNITS).reduce((acc, key) => {
             if (dataMap[key] !== undefined) {
-                acc[key] = parseFloat(dataMap[key].toFixed(3)); // Arrondi à 3 décimales
+                acc[key] = parseFloat(dataMap[key].toFixed(3));
             }
             return acc;
         }, {});
@@ -25,7 +24,7 @@ router.get('/', async (req, res) => {
             id: 30,
             unit: UNITS,
             data: {
-                date: new Date().toISOString(), // Ne pas toucher la date
+                date: new Date().toISOString(),
                 ...orderedData
             }
         };
@@ -35,8 +34,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur live' });
     }
 });
-
-
 
 // Route /live/{list_capteur}
 router.get('/:list_capteur', async (req, res) => {
@@ -58,13 +55,11 @@ router.get('/:list_capteur', async (req, res) => {
 
         const { data: latestData } = await db.getLiveDataBySensor(capteurs);
 
-        // Transformer les données en un objet clé-valeur
         const dataMap = latestData.reduce((acc, item) => {
             acc[item._measurement] = item._value;
             return acc;
         }, {});
 
-        // Forcer l'ordre des clés selon UNITS
         const orderedData = Object.keys(UNITS).reduce((acc, key) => {
             if (dataMap[key] !== undefined) {
                 acc[key] = parseFloat(dataMap[key].toFixed(3));
@@ -72,7 +67,6 @@ router.get('/:list_capteur', async (req, res) => {
             return acc;
         }, {});
 
-        // Unités des capteurs demandés
         const filteredUnits = Object.keys(UNITS)
             .filter(key => capteurs.includes(key))
             .reduce((acc, key) => {

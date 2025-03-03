@@ -27,14 +27,14 @@ const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 <style scoped>
 .cases-row {
   display: flex;
-  flex-wrap: nowrap;        /* Ne pas passer à la ligne suivante */
-  justify-content: center;  /* Centre horizontalement les éléments */
-  align-items: center;      /* Centre verticalement si besoin */
-  gap: 1rem;                /* Espace entre chaque case */
-  margin: 1rem auto;        /* Espace autour + centrage dans le parent */
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem auto;
   padding: 0 1rem;
-  overflow-x: auto;         /* Barre de défilement horizontale si trop d'éléments */
-  white-space: nowrap;      /* Évite les retours à la ligne dans le flux */
+  overflow-x: auto;
+  white-space: nowrap;
   height: auto;
 }
 

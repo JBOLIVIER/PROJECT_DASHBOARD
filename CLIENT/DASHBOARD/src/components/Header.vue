@@ -1,4 +1,3 @@
-import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header class="header">
     <h1>METEO SITE</h1>
@@ -14,9 +13,8 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-/* Header Styling */
 .header {
-  background: #34495e; /* Darker shade of blue */
+  background: #34495e;
   color: white;
   padding: 20px 30px;
   text-align: center;
@@ -30,7 +28,6 @@ import { RouterLink, RouterView } from 'vue-router'
   letter-spacing: 2px;
 }
 
-/* Navigation Styling */
 nav ul {
   list-style: none;
   padding: 0;
@@ -43,7 +40,7 @@ nav ul li {
 }
 
 nav ul li a {
-  color: #ecf0f1; /* Lighter shade of white */
+  color: #ecf0f1;
   text-decoration: none;
   font-size: 1.1em;
   font-weight: 600;
@@ -52,11 +49,10 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  color: #e74c3c; /* Red color on hover */
-  transform: translateY(-3px); /* Lift effect */
+  color: #e74c3c;
+  transform: translateY(-3px);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .header {
     padding: 15px;

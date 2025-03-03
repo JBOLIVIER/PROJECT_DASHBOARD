@@ -19,9 +19,9 @@ const availableStations = [
 
 const promises = []
 availableStations.forEach(station => {
-  let route = "http://" + station + ".ensg.eu:3000/live/lat-lon";  
-  promises.push(fetch(route) // On fait la requête à l'URL de la station
-    .then(response => response.json()) // On convertit la réponse en JSON
+  let route = "http://" + station + ".ensg.eu:3000/live/lat-lon";
+  promises.push(fetch(route)
+    .then(response => response.json())
     .catch(error => {
       console.error(`Erreur lors de la récupération des données pour la station ${station}:`, error);
     }));
@@ -34,7 +34,6 @@ onMounted(()=> {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
-  //console.log("stationsloc : ", StationsLoc);
   Promise.all(promises)
 .then(results => {
   console.log("Données récupérées pour toutes les stations:", results);

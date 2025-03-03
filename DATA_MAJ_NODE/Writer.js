@@ -1,37 +1,24 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
 
-// Fonction pour insérer les données météorologiques dans InfluxDB
 async function insertWeatherData(data) {
-    // Configuration de la connexion InfluxDB
-    const url = 'http://localhost:8086';  // Remplacez par l'URL de votre serveur InfluxDB
-    const org = 'ign'; // Remplacez par votre organisation
-    const token = "uTAeUuj_HbDjTE4AeButCDMiQ4IAFzmRXyXYRfpbhCjjhbf9C3tlwS-vhgDcoLqax1avKKxwWx30HTLtntXA5g=="; // Assurez-vous que votre token est dans les variables d'environnement
-    const bucket = 'meteo'; // Remplacez par votre bucket InfluxDB
+    const url = 'http://localhost:8086';
+    const org = 'ign';
+    const token = "uTAeUuj_HbDjTE4AeButCDMiQ4IAFzmRXyXYRfpbhCjjhbf9C3tlwS-vhgDcoLqax1avKKxwWx30HTLtntXA5g==";
+    const bucket = 'meteo';
 
-    // Créer un client InfluxDB
     const client = new InfluxDB({ url, token });
 
-    // Créer un Write API
-    const writeApi = client.getWriteApi(org, bucket, 'ns'); // 'ns' pour nanosecondes de précision
+    const writeApi = client.getWriteApi(org, bucket, 'ns');
 
-    // Créer un point InfluxDB
-
-    //.timestamp(timestamp)                // Ajouter le timestamp
-
-    // Ajouter chaque mesure comme un champ
     data.measures.forEach(m => {
-        const point = new Point(m.name); // Nom de la mesure
+        const point = new Point(m.name);
         let value;
         if (isNaN(m.value)) { value = 0; }
         else { value = m.value };
-        point.floatField("value", m.value); // Ajouter chaque champ avec son nom et sa valeur
-        // Écrire les données dans InfluxDB
+        point.floatField("value", m.value);
         writeApi.writePoint(point)
     });
 
-
-
-    // Fermer le Write API pour envoyer les données
     writeApi.close()
         .then(() => {
             console.log('Données insérées avec succès!');
@@ -41,5 +28,4 @@ async function insertWeatherData(data) {
         });
 }
 
-// Exporter la fonction pour l'utiliser ailleurs
 module.exports = insertWeatherData;
